@@ -1,0 +1,113 @@
+.login-box{
+    margin-left: 25px;
+    border: 2px solid rgba(162, 161, 152, 0.47);
+    border-radius: 5px;
+    margin-top: 15px;
+}
+.user-input{
+    margin-top: 30px;
+}
+.login-img{
+    width: 48px;
+    height: width;
+    margin: 5px;
+    border-radius: 2px;
+}
+.box {
+    display:-webkit-box;display:-moz-box;display:-o-box;display:-ms-box;display:box;
+    list-style: none;
+
+    padding: 0px;
+    margin: 0px;
+}
+.vertical-list{
+    -webkit-box-orient:vertical;-moz-box-orient:vertical;-o-box-orient:vertical;-ms-box-orient:vertical;box-orient:vertical;
+}
+.horizontal-list{
+    -webkit-box-orient:horizontal;-moz-box-orient:horizontal;-o-box-orient:horizontal;-ms-box-orient:horizontal;box-orient:horizontal;
+}
+.each-user{
+    -webkit-box-orient:horizontal;-moz-box-orient:horizontal;-o-box-orient:horizontal;-ms-box-orient:horizontal;box-orient:horizontal;
+}
+.each-user li:nth-child(1){
+    -webkit-box-flex:1;-moz-box-flex:1;-o-box-flex:1;-ms-box-flex:1;box-flex:1;
+}
+.each-user li:nth-child(2){
+    -webkit-box-flex:3;-moz-box-flex:3;-o-box-flex:3;-ms-box-flex:3;box-flex:3;
+}
+.saved-user-email{
+    width: 156px;
+    text-align: center;
+    padding-left: 15px;
+}
+.more{
+    padding: 0px;
+    margin: 5px;
+    margin-left: 128px;
+}
+.login-table{
+    margin-bottom: 0px;
+}
+.login-row{
+    margin-bottom: 10px;
+}
+
+.login-table{
+    border: 2px solid #bababa;
+}
+.date{
+    margin-top: 0px;
+    float: right;
+}
+.mail-row{
+    margin: 0px;
+    padding: 0px;
+}
+a,a:hover,a:link,a:visited,a:active{
+    TEXT-DECORATION:none;
+}
+.sender{
+    margin: 10px;
+    padding: 5px;
+}
+.mail-content{
+    font-size: xx-large;
+}
+.mail-ap{
+    width: 24px;
+    height: width;
+}
+.mail-date{
+    margin-top: 0px;
+}
+.mail-them{
+    margin-top: 15px;
+    font-size: large;
+    font-style: oblique;
+}
+hr{
+    margin: 0px;
+    padding: 0px;
+}
+.mail-row{
+    margin:0;
+    padding: 0px;
+}
+.foot-nav{
+    padding-left: 38%;
+    padding-right: padding-left;
+}
+
+.mail-list-toolbar {
+    padding: 4px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #DDD;
+    border-color: gray;
+    background-color: #F5F5F5;
+}
+
+.panel-group {
+    height: calc(100% - 142px);
+}
+

@@ -7,7 +7,7 @@
 	Database db = Database.getDefaultDatabase();
 %>
 
-<% user = db.getUserById((int)session.getAttribute("userid")); %>
+<% user = (User)session.getAttribute("user"); %>
 
 <!doctype>
 <html lang="en">
@@ -514,7 +514,7 @@ ${{MailContent}}
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title" id="gridSystemModalLabel"><a class="btn" data-toggle="modal" data-target=".sign">注册</a> | <a class="btn">登录</a></h4>
+                    <h4 class="modal-title" id="gridSystemModalLabel"><a class="btn">添加邮箱</a></h4>
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
@@ -522,51 +522,17 @@ ${{MailContent}}
                             <tbody><tr>
                                 <td>
                                     <div class="login">
-                                        <form class="user-input">
+                                        <form id="addaddressform" class="user-input" action="/Mail/addaddress" method="post">
                                             <div class="form-group">
-                                                <input class="form-control" id="exampleInputEmail1" placeholder="请输入Email账号" type="email">
+                                                <input class="form-control" name="account" placeholder="请输入Email账号" type="email">
                                                 <label class="text-danger">账号不存在</label>
                                             </div>
                                             <div class="form-group">
-                                                <input class="form-control" id="exampleInputPassword1" placeholder="请输入密码" type="password">
+                                                <input class="form-control" name="password" placeholder="请输入密码" type="password">
                                                 <label class="text-danger">密码错误</label>
                                             </div>
-                                            <label>
-                                                <input type="checkbox"> 记住密码
-                                            </label>
-                                            <label>
-                                                <input type="checkbox"> 自动登录
-                                            </label>
                                         </form>
                                     </div>
-                                </td>
-
-                                <td>
-                                    <ul class="box vertical-list">
-                                        <li>
-                                            <div class="btn login-box">
-                                                <ul class="box each-user">
-                                                    <li><img src="resource/1.jpg" class="login-img"></li>
-                                                    <li>
-                                                        <ul class="box vertical-list">
-                                                            <li><h4 class="text-muted">马景阳</h4></li>
-                                                            <li class="saved-user-email"><small class="text-info">rtnelo@qq.com</small></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li>
-                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                            <span aria-hidden="true">×</span>
-                                                        </button>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="btn more">
-                                                <img src="resource/2.png" class="img-thumbnail">
-                                            </div>
-                                        </li>
-                                    </ul>
                                 </td>
                             </tr>
                         </tbody></table>
@@ -574,55 +540,7 @@ ${{MailContent}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary">登录</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <div class="modal sign">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title">注册</h4>
-                </div>
-                <div class="modal-body">
-
-
-                             <form class="form-horizontal">
-              <div class="form-group">
-                <label for="sender-address" class="col-sm-2 control-label">用户名</label>
-                <div class="col-sm-10">
-                  <input class="form-control" id="sender-address" placeholder="用户名" type="email">
-                  <p class="text-success">格式正确✔</p>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="reciever-address" class="col-sm-2 control-label">邮箱地址</label>
-                <div class="col-sm-10">
-                  <input class="form-control" id="reciever-address" placeholder="邮箱地址" type="email">
-                  <p class="text-success">格式正确✔</p>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="title" class="col-sm-2 control-label">密码</label>
-                <div class="col-sm-10">
-                  <input class="form-control" id="title" placeholder="密码" type="password">
-                </div>
-              </div>  
-              <div class="form-group">
-                <label for="title" class="col-sm-2 control-label">密码确认</label>
-                <div class="col-sm-10">
-                  <input class="form-control" id="title" placeholder="密码确认" type="password">
-                  <p class="text-danger">密码不匹配</p>
-                </div>
-              </div>                      
-            </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary">提交</button>
+                    <button type="button" class="btn btn-primary" onclick="$('#addaddressform').submit();">登录</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

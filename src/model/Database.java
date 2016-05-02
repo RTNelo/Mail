@@ -6,8 +6,6 @@ import java.util.List;
 
 import util.Util;
 
-import com.mysql.jdbc.Driver;
-
 public class Database {
 	static final String defaultUser = "root";
 	static final String defaultPass = "VNH7PWHap4k4x9zkZasqY5wWbddtR9Wz";
@@ -115,6 +113,15 @@ public class Database {
 		return new MailAddress(id, userId, account, password);
 	}
 	
+	public MailAddress getMailAddressById(int id) throws SQLException {
+		ResultSet rs = this.getStatement("SELECT * FROM mailaddresses WHERE id = ?", id).executeQuery();
+		if (rs.next()) {
+			return this.resultSetToMailAddress(rs);
+		} else {
+			return null;
+		}
+	}
+	
 	public List<MailAddress> getMailAddressByUserId(int userId) throws SQLException {
 		List<MailAddress> results = new LinkedList<MailAddress>();
 		ResultSet rs = this.getStatement("SELECT * FROM mailaddresses WHERE userid = ?", userId).executeQuery();
@@ -140,6 +147,15 @@ public class Database {
 		Mail.Type type = Mail.Type.values()[rs.getInt("type")];
 		return new Mail(mailId, mailAddressId, subject, content,
 				sender, recvers.split(";"), sendTime, recvTime, type);
+	}
+	
+	public Mail getMailById(int id) throws SQLException {
+		ResultSet rs = this.getStatement("SELECT * FROM mails WHERE id = ?", id).executeQuery();
+		if (rs.next()) {
+			return this.resultSetToMail(rs);
+		} else {
+			return null;
+		}
 	}
 	
 	public List<Mail> getMailByMailAddressId(int mailAddressId) throws SQLException {
