@@ -3,8 +3,8 @@ package servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 
-import javax.mail.Address;
 import javax.mail.Message;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,20 +13,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Database;
+import model.Mail;
+import model.Mail.Type;
 import model.MailAddress;
-import model.User;
 
 /**
- * Servlet implementation class MailAddressSetter
+ * Servlet implementation class GetSendTextMailServlet
  */
-@WebServlet("/MailAddressSetter")
-public class AddMailAddressServlet extends HttpServlet {
+@WebServlet("/GetSendTextMailServlet")
+public class GetSendTextMailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AddMailAddressServlet() {
+    public GetSendTextMailServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -46,33 +47,41 @@ public class AddMailAddressServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
 		Database database = Database.getDefaultDatabase();
+		int mailaddressId = Integer.parseInt(request.getParameter("mailaddressId"));
 		try {
-			String account = request.getParameter("account");
-			String password = request.getParameter("password");
-			User user = (User)request.getSession().getAttribute("user");
-			MailAddress mailAddress = new MailAddress(user, account, password);
-			if(database.getMailAddressByUserAndAccount(user, account)==null){
-				int ret = database.addMailAddress(mailAddress);
+			List<Mail> mails = database.getMailByMailAddressIdAndType(mailaddressId, Type.SENT);
+			if(mails != null){
 				out.print("{");
 				out.print("\"status\":0,");
-				out.print("\"comment\":\"Add mail address success\"");
-				out.print("\"result\":");
-				out.print("{\"id\":\""+ret+"\"}");
+				out.print("\"comment\":\"Get message success\",");
+				out.print("\"result\":[");
+				for(int i = 0;i < mails.size();i++){
+					Mail mail = mails.get(i);
+					out.print("{"+"\"From\":\""+mail.getSender()+"\",");
+					out.print("\"To\":\""+mail.getRecver()[0]+"\",");
+					out.print("\"SendTime\":\""+mail.getSendTime()+"\",");
+					out.print("\"ReceiveTime\":\""+mail.getRecvTime()+"\",");
+					out.print("\"Subject\":\""+mail.getSubject()+"\",");
+					out.print("\"Content\":\""+mail.getContent()+"\"}");
+					if(i!=mails.size()-1){
+						out.print(",");
+					}
+				}
+				out.print("]");
 				out.print("}");
 			}
 			else{
 				out.print("{");
 				out.print("\"status\":2,");
-				out.print("\"comment\":\"mail address exist\"");
+				out.print("\"comment\":\"send mail no exist\"");
 				out.print("}");
 			}
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			out.print("{");
 			out.print("\"status\":1,");
-			out.print("\"comment\":\"Add mail address fail\"");
+			out.print("\"comment\":\"Get message fail\"");
 			out.print("}");
 		}
 	}

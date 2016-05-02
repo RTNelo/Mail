@@ -55,21 +55,21 @@ public class SendTextMailServlet extends HttpServlet {
 		mailInfo.setMailServerHost("smtp.qq.com");
 		mailInfo.setMailServerPort("25");
 		mailInfo.setValidate(true);
-		mailInfo.setUserName(request.getParameter("user"));//�û�
-		mailInfo.setPassword(request.getParameter("pass"));//����
-		mailInfo.setFromAddress(request.getParameter("from"));//��������
-		String[] to = {request.getParameter("to")};//�ռ�����
+		mailInfo.setUserName(ma.getAccount());//锟矫伙拷
+		mailInfo.setPassword(ma.getPassword());//锟斤拷锟斤拷
+		mailInfo.setFromAddress(ma.getAccount());//锟斤拷锟斤拷锟斤拷锟斤拷
+		String[] to = {request.getParameter("to")};//锟秸硷拷锟斤拷锟斤拷
 		mailInfo.setToAddress(to);
-		String[] toCC = {request.getParameter("toCC")};//����
-		mailInfo.setToCarbonCopyAddress(toCC);
-		String[] toBCC = {request.getParameter("toBCC")};//����
-		mailInfo.setToBlindCarbonCopyAddress(toBCC);
-		String[] file = {request.getParameter("file")};//����
-		mailInfo.setAttachFileNames(file);
-		mailInfo.setSubject(request.getParameter("title"));//����
-		String body = request.getParameter("content");//����
+//		String[] toCC = {request.getParameter("toCC")};//锟斤拷锟斤拷
+//		mailInfo.setToCarbonCopyAddress(toCC);
+//		String[] toBCC = {request.getParameter("toBCC")};//锟斤拷锟斤拷
+//		mailInfo.setToBlindCarbonCopyAddress(toBCC);
+//		String[] file = {request.getParameter("file")};//锟斤拷锟斤拷
+//		mailInfo.setAttachFileNames(file);
+		mailInfo.setSubject(request.getParameter("title"));//锟斤拷锟斤拷
+		String body = request.getParameter("content");//锟斤拷锟斤拷
 		mailInfo.setContent(body);
-		System.out.println(SimpleMailSender.sendHtmlMail(ma, mailInfo));//���������ʽ
+		System.out.println(SimpleMailSender.sendHtmlMail(ma, mailInfo));//锟斤拷锟斤拷锟斤拷锟斤拷锟绞�
 		out.print("{");
 		out.print("\"status\":0,");
 		out.print("\"comment\":\"Send mail success\"");

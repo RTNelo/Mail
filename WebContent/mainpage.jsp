@@ -161,11 +161,11 @@
               <h2>邮箱</h2><table class="account-list table table-bordered table-striped table-hover full-width">
                 <thead>
                 </thead>
-                <tbody>
+                <tbody id='account-list-item-container'>
                 <%
                 	for (MailAddress mailAddress : db.getMailAddressByUser(user)) {
                 		%>
-                <tr class="account-list-item full-width">
+                <tr class="account-list-item full-width" mailid="<%=mailAddress.getId() %>">
                   <td>
                     <div class="header full-width">
                       <div style="" class="row info-header full-width">
@@ -431,9 +431,9 @@ ${{MailContent}}
               <thead>
                 
               </thead>
-              <tbody>
+              <tbody id="contact-list-item-container">
               <% for (Contact contact : db.getContactByUser(user)) { %>
-                  <tr class="contact-list-item">
+                  <tr class="contact-list-item" itemid=<%= contact.getId() %>>
                     <td>
                       <div class="header full-width">
                         <div style="" class="row info-header full-width">
@@ -479,23 +479,6 @@ ${{MailContent}}
                               <label for="email">邮箱</label>
                               <input class="form-control" id="email" placeholder="邮箱地址" type="email">
                             </div>
-                            <div class="form-group">
-                              <label for="password">密码</label>
-                              <input class="form-control" id="password" placeholder="" type="password">
-                            </div>
-                          </form>
-                        </div>
-                        <div class="list-body">
-                          <hr class="custom">
-                          <form>
-                            <div class="form-group">
-                              <label for="cellphone">手机</label>
-                              <input class="form-control" id="cellphone" placeholder="手机号码" readonly="" type="text">
-                            </div>
-                            <div class="form-group">
-                              <label for="location">所在地</label>
-                              <input class="form-control" id="location" placeholder="所在地" readonly="" type="text">
-                            </div>
                           </form>
                         </div>
                       </div>
@@ -506,7 +489,7 @@ ${{MailContent}}
               <tfoot> 
                   <tr class="list-item-adder">
                     <td>
-                      <button type="button" class="btn btn-default btn-lg center-block">
+                      <button type="button" class="btn btn-default btn-lg center-block" data-toggle="modal" data-target=".modal-addaddress">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 添加
                       </button>
                     </td>
@@ -533,11 +516,10 @@ ${{MailContent}}
                                         <form id="addaddressform" class="user-input" action="/Mail/addaddress" method="post">
                                             <div class="form-group">
                                                 <input class="form-control" name="account" placeholder="请输入Email账号" type="email">
-                                                <label class="text-danger">账号不存在</label>
+                                                <label class="text-danger" id="mailaddressaddtip"></label>
                                             </div>
                                             <div class="form-group">
                                                 <input class="form-control" name="password" placeholder="请输入密码" type="password">
-                                                <label class="text-danger">密码错误</label>
                                             </div>
                                         </form>
                                     </div>
@@ -548,11 +530,48 @@ ${{MailContent}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" onclick="$('#addaddressform').submit();">登录</button>
+                    <button type="button" class="btn btn-primary" id='mailaddressaddbtn'>添加</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <div class="modal modal-addaddress fade" role="dialog" aria-labelledby="gridSystemModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="gridSystemModalLabel"><a class="btn">添加联系人</a></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <table class="table" rules="cols">
+                            <tbody><tr>
+                                <td>
+                                    <div class="login">
+                                        <form id="addcontactform" class="user-input" action="/Mail/addaddress" method="post">
+                                            <div class="form-group">
+                                                <input class="form-control" name="nickname" placeholder="昵称" type="text">
+                                                <label id="addcontacttip" class="text-danger"></label>
+                                            </div>
+                                            <div class="form-group">
+                                                <input class="form-control" name="emailaddress" placeholder="邮箱" type="email">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" id="addcontactbtn" class="btn btn-primary">登录</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 
     <script type="text/javascript" src="js/mail.js"></script>
   

@@ -45,7 +45,7 @@ public class GetMailAddressServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
 		Database database = Database.getDefaultDatabase();
-		User user = (User)request.getAttribute("user");
+		User user = (User)request.getSession().getAttribute("user");
 		try {
 			List<MailAddress> mailAddresses = database.getMailAddressByUser(user);
 			out.print("{");

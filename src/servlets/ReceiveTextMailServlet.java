@@ -66,43 +66,38 @@ public class ReceiveTextMailServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		
-		String name = request.getParameter("name");//�û���
-		String password = request.getParameter("password");//����
-		String host = request.getParameter("host");//������
-		SimpleMailReceiver receiver = new SimpleMailReceiver(name,password,host);
 		try{
 			int maId = Integer.parseInt(request.getParameter("mailaddressid"));
 			MailAddress ma = Database.getDefaultDatabase().getMailAddressById(maId);
+			SimpleMailReceiver receiver = new SimpleMailReceiver(ma.getAccount(),ma.getPassword(),host);
 			Message [] messages = receiver.getMail(ma);
-			out.print("{");
-			out.print("\"status\":0,");
-			out.print("\"comment\":\"Get message success\",");
-			out.print("\"result\":[");
-			for(int i = 0;i < messages.length;i++){
-				Message message = messages[i];
-				out.print("{"+"\"From\":\""+message.getFrom()[0].toString()+"\",");
-				out.print("\"To\":\""+message.getAllRecipients()[0].toString()+"\",");
-				out.print("\"SendTime\":\""+message.getSentDate()+"\",");
-				out.print("\"Subject\":\""+message.getSubject()+"\",");
-				out.print("\"Content\":\""+message.getContent()+"\"}");
-				if(i!=messages.length-1){
-					out.print(",");
+			if(messages != null){
+				out.print("{");
+				out.print("\"status\":0,");
+				out.print("\"comment\":\"Get message success\",");
+				out.print("\"result\":[");
+				for(int i = 0;i < messages.length;i++){
+					Message message = messages[i];
+					out.print("{\"From\":\""+message.getFrom()[0].toString()+"\",");
+					out.print("\"To\":\""+message.getAllRecipients()[0].toString()+"\",");
+					out.print("\"SendTime\":\""+message.getSentDate()+"\",");
+					out.print("\"ReceiveTime\":\""+message.getReceivedDate()+"\",");
+					out.print("\"Subject\":\""+message.getSubject()+"\",");
+					out.print("\"Content\":\""+message.getContent()+"\"}");
+					if(i!=messages.length-1){
+						out.print(",");
+					}
 				}
+				out.print("]");
+				out.print("}");
 			}
-			out.print("]");
-			out.print("}");
-//			out.print("<table border='1'><tr><td>Sequence</td><td>Sender</td><td>Recipient</td><td>Subject</td><td>Content</td>");
-//			for(int i = 0; i < messages.length; i++){
-//				Message message = messages[i];
-//				out.print("<tr>");
-//				out.print("<td>" + i + 1 + "</td>");
-//				out.print("<td>" + message.getFrom()[0].toString() + "</td>");
-//				out.print("<td>" + message.getAllRecipients()[0].toString() + "</td>");
-//				out.print("<td>" + message.getSubject() + "</td>");
-//				out.print("<td>" + message.getContent() + "</td>");
-//				out.print("</tr>");
-//			}
-//			out.print("</table>");
+			else{
+				out.print("{");
+				out.print("\"status\":2,");
+				out.print("\"comment\":\"Login fail\"");
+				out.print("}");
+			}
+			
 		}catch(MessagingException | SQLException e){
 			e.printStackTrace();
 			out.print("{");

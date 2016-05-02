@@ -298,6 +298,27 @@ public class Database {
 		this.removeContactById(contact.getId());
 	}
 	
+	public HostInfo resultSetToHostInfo(ResultSet rs) throws SQLException {
+		int id = rs.getInt("id");
+		String suffix = rs.getString("suffix");
+		String smtpHost = rs.getString("smtphost");
+		int smtpPort = rs.getInt("smtpport");
+		String pop3Host = rs.getString("pop3host");
+		int pop3Port = rs.getInt("pop3port");
+		
+		return new HostInfo(id, suffix, smtpHost, smtpPort, pop3Host, pop3Port);
+	}
+	
+	public HostInfo getHostInfoById(int id) throws SQLException {
+		ResultSet rs = this.getStatement("SELECT * FROM hostinfos WHERE id = ?",
+				id).executeQuery();
+		if (rs.next()) {
+			return this.resultSetToHostInfo(rs);
+		} else {
+			return null;
+		}
+	}
+	
 	static public void test() throws SQLException {
 		Database db = Database.getDefaultDatabase();
 		int id = db.addUser(new User("haha4445555666666777", "123", "nickname4455555456666777"));

@@ -49,12 +49,21 @@ public class AddContactServlet extends HttpServlet {
 			String mailAddress = request.getParameter("mailaddress");
 			User user = (User)request.getSession().getAttribute("user");
 			Contact contact = new Contact(user, nickname, mailAddress);
-		
-			database.addContact(contact);
-			out.print("{");
-			out.print("\"status\":0,");
-			out.print("\"comment\":\"Add contact success\"");
-			out.print("}");
+			if(database.getContactByUserAndMailAddress(user, mailAddress)==null){
+				int ret = database.addContact(contact);
+				out.print("{");
+				out.print("\"status\":0,");
+				out.print("\"comment\":\"Add contact success\"");
+				out.print("\"result\":");
+				out.print("{\"id\":\""+ret+"\"}");
+				out.print("}");
+			}
+			else{
+				out.print("{");
+				out.print("\"status\":2,");
+				out.print("\"comment\":\"Contact exist\"");
+				out.print("}");
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
