@@ -167,6 +167,16 @@ public class Database {
 		return results;
 	}
 	
+	public List<Mail> getMailByMailAddressIdAndType(int mailAddressId, Mail.Type type) throws SQLException {
+		List<Mail> results = new LinkedList<Mail>();
+		ResultSet rs = this.getStatement("SELECT * FROM mails WHERE mailaddressid = ? and type = ?",
+				mailAddressId, type.ordinal()).executeQuery();
+		while (rs.next()) {
+			results.add(this.resultSetToMail(rs));
+		}
+		return results;
+	}
+	
 	private Contact resultSetToContact(ResultSet rs) throws SQLException {
 		int contactId = rs.getInt("id");
 		int userId = rs.getInt("userid");
@@ -182,6 +192,10 @@ public class Database {
 			results.add(this.resultSetToContact(rs));
 		}
 		return results;
+	}
+	
+	public List<Contact> getContactByUser(User user) throws SQLException {
+		return this.getContactByUserId(user.getId());
 	}
 	
 	private int getGeneratedKey(PreparedStatement stmt) throws SQLException { 
@@ -226,6 +240,42 @@ public class Database {
 		stmt.executeUpdate();
 		contact.setId(this.getGeneratedKey(stmt));
 		return contact.getId();
+	}
+	
+	public void removeUserById(int id) throws SQLException {
+		PreparedStatement stmt = this.getStatement("DELETE FROM users WHERE id = ?;", id);
+		stmt.executeUpdate();
+	}
+	
+	public void removeUser(User user) throws SQLException {
+		this.removeUserById(user.getId());
+	}
+	
+	public void removeMailAddressById(int id) throws SQLException {
+		PreparedStatement stmt = this.getStatement("DELETE FROM mailaddresses WHERE id = ?;", id);
+		stmt.executeUpdate();
+	}
+
+	public void removeMailAddress(MailAddress mailAddress) throws SQLException {
+		this.removeMailAddressById(mailAddress.getId());
+	}
+	
+	public void removeMailById(int id) throws SQLException {
+		PreparedStatement stmt = this.getStatement("DELETE FROM mails WHERE id = ?;", id);
+		stmt.executeUpdate();
+	}
+	
+	public void removeMail(Mail mail) throws SQLException {
+		this.removeMailById(mail.getId());
+	}
+	
+	public void removeContactById(int id) throws SQLException {
+		PreparedStatement stmt = this.getStatement("DELETE FROM contacts WHERE id = ?;", id);
+		stmt.executeUpdate();
+	}
+	
+	public void removeContact(Contact contact) throws SQLException {
+		this.removeContactById(contact.getId());
 	}
 	
 	static public void test() throws SQLException {

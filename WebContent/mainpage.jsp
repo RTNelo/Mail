@@ -170,7 +170,16 @@
                     <div class="header full-width">
                       <div style="" class="row info-header full-width">
                         <div class="col-md-8">
-                          <p class="email"><%= mailAddress.getAccount() %></p>
+                        <% 
+                        String account = mailAddress.getAccount();
+                        int endPoint = account.indexOf("@");
+                        if (endPoint == -1) {
+                        	endPoint = account.length();
+                        }
+                        String nickname = account.substring(0, endPoint);
+                        %>
+                          <p class="nickname"><%= nickname %></p>
+                          <p class="email"><%= account %></p>
                         </div>
                         <div class="float-right">
                           <div style="display: none;" class="btn-group button-group" role="group">
@@ -211,22 +220,22 @@
                       </div>
                       <div class="list-body">
                         <table class="table table table-bordered table-striped table-hover mailbox-list">
-                          <tbody><tr class="mailbox-list-item">
+                          <tbody><tr class="mailbox-list-item" mailtype="RECV" mailid="<%=mailAddress.getId() %>">
                             <td>
                               <p><span class="glyphicon glyphicon-download" aria-hidden="true"></span> 收件箱</p>
                             </td>
                           </tr>
-                          <tr class="mailbox-list-item">
+                          <tr class="mailbox-list-item" mailtype="SENT" mailid="<%=mailAddress.getId() %>">
                             <td>
                               <p><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> 发件箱</p>
                             </td>
                           </tr>
-                          <tr class="mailbox-list-item">
+                          <tr class="mailbox-list-item" mailtype="DRAFT" mailid="<%=mailAddress.getId() %>">
                             <td>
                               <p><span class="glyphicon glyphicon-inbox" aria-hidden="true"></span> 草稿箱</p>
                             </td>
                           </tr>
-                          <tr class="mailbox-list-item">
+                          <tr class="mailbox-list-item" mailtype="TRASH" mailid="<%=mailAddress.getId() %>">
                             <td>
                               <p><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 回收站</p>
                             </td>
@@ -423,13 +432,14 @@ ${{MailContent}}
                 
               </thead>
               <tbody>
+              <% for (Contact contact : db.getContactByUser(user)) { %>
                   <tr class="contact-list-item">
                     <td>
                       <div class="header full-width">
                         <div style="" class="row info-header full-width">
                           <div class="col-md-6">
-                            <p class="nickname">杨程</p>
-                            <p class="email">baka@626.com</p>
+                            <p class="nickname"><%=contact.getNickname() %></p>
+                            <p class="email"><%=contact.getMailAddress() %></p>
                           </div>
                           <div class="float-right">
                             <div style="display: none;" class="btn-group button-group" role="group">
@@ -488,10 +498,10 @@ ${{MailContent}}
                             </div>
                           </form>
                         </div>
-                        </div>
-                      
+                      </div>
                     </td>
                   </tr>
+              <% } %>
               </tbody>
               <tfoot> 
                   <tr class="list-item-adder">
@@ -505,8 +515,6 @@ ${{MailContent}}
             </table>
       </div>
      </div>
-</div><div class="toggler">
-	<span style="display: none;" class="glyphicon glyphicon-chevron-right">&nbsp;</span> <span style="display: block;" class="glyphicon glyphicon-chevron-left">&nbsp;</span>
 </div></div>
 
     <div class="modal modal-login fade" role="dialog" aria-labelledby="gridSystemModalLabel">

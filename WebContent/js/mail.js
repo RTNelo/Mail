@@ -10,27 +10,51 @@
 
       var editor_container = $(".editor-container");
       var mail_list_container = $(".mail-list-container");
+      var mail_list = $("#accordion");
+      
+      function add_mail(subject, content, sender, date) {
+    	  function generate_mail(subject, content, sender, date) {
+    		  s = '<div class="panel panel-default">\n<div class="panel-heading" role="tab" id="headingOne">\n<h4 class="panel-title">\n<div class="panel-control">\n<a class="panel-head" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">\n<div class="row mail-row">\n<div class="col-md-2"><h4 class="text-info">' + title + '</h4></div>\n<div class="col-md-10">' + content.substring(0, 20) + '...</div>\n<div class="col-md-12"><small class="date">' + date + '</small></div>\n</div>\n</a>\n<div style="display: none;" class="row mail-row panel-btn">\n<hr>\n<div class="float-right btn-group">\n<button class="btn btn-danger mail-btn"> \xe5\x88\xa0\xe9\x99\xa4</button>\n<button class="btn btn-default mail-btn"> \xe8\xbd\xac\xe5\x8f\x91</button>\n<button class="btn btn-default mail-btn"> \xe5\x8a\xa0\xe5\xaf\x86</button>\n<button class="btn btn-default mail-btn"> \xe7\xa7\xbb\xe5\x88\xb0\xe7\xbc\x93\xe5\xad\x98</button>\n</div>\n</div>\n</div>\n</h4>\n</div>\n<div style="" aria-expanded="true" id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">\n<div class="panel-body">\n<div class="row">\n<div class="col-md-3">\n\xe5\x8f\x91\xe4\xbb\xb6\xe4\xba\xba\xef\xbc\x9a<button type="button" class="btn btn-info" data-toggle="modal" data-target=".bs-example-modal-sm">' + sender + '</button>\n</div>\n<div class="col-md-6">\n<p class="mail-them text-info">' + subject + '</p>\n</div>\n<div class="col-md-3 mail-date text-primary">\n<div class="mail-date">\n\xe5\x85\xb7\xe4\xbd\x93\xe6\x97\xb6\xe9\x97\xb4\xef\xbc\x9a' + date + '&nbsp;&nbsp;\n</div>\n</div>\n</div>\n\n<hr>\n<div class="mail-content">\n' + content + '\n</div>\n</div>\n</div>\n</div>\n';
+    		  return $(s);
+    	  }
+    	  mail_list.append(generate_mail(subject, content, sender, date));
+      }
+      
+      function clear_mail() {
+    	  mail_list.html('');
+      }
+      
+      function get_mail_list(mail_address_id, mail_type) {
+      }
 
-      function toggle_main(state) {
+      function toggle_main(state, selse1, selse2) {
         if (state == "editor") {
           mail_list_container.slideUp("fast");
+          clear_mail();
           editor_container.slideDown("fast");
         } else if (state == "maillist") {
+          clear_mail();
+          mails = get_mail_list(selse1, selse2);
+          for (var mail in mails) {
+          	add_mail(mail.subject, mail.content, mail.sender, mail.date);
+          }
           editor_container.slideUp("fast");
           mail_list_container.slideDown("fast");
         } else if (state == "none") {
           editor_container.slideUp("fast");
+          clear_mail();
           mail_list_container.slideUp("fast");
         } else if (state == "init") {
           editor_container.slideUp();
           mail_list_container.slideUp();
+          clear_mail();
         }
       }
 
       toggle_main("init");
 
       $(".mailbox-list-item").click(function() {
-        toggle_main("maillist")
+        toggle_main("maillist", $(this).attr('mailid'), $(this).attr('mailtype'));
       });
 
       $(".send").click(function(event) {
