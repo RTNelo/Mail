@@ -319,6 +319,16 @@ public class Database {
 		}
 	}
 	
+	public HostInfo getHostBySuffix(String suffix) throws SQLException {
+		ResultSet rs = this.getStatement("SELECT * FROM hostinfos WHERE suffix = ?",
+				suffix).executeQuery();
+		if (rs.next()) {
+			return this.resultSetToHostInfo(rs);
+		} else {
+			return null;
+		}
+	}
+	
 	static public void test() throws SQLException {
 		Database db = Database.getDefaultDatabase();
 		int id = db.addUser(new User("haha4445555666666777", "123", "nickname4455555456666777"));
