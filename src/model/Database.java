@@ -239,7 +239,7 @@ public class Database {
 				mail.getMailAddressId(), mail.getSubject(), mail.getContent(),
 				mail.getSender(), String.join(";", mail.getRecver()),
 				mail.getSendTime(), mail.getRecvTime(),
-				mail.getType());
+				mail.getType().ordinal());
 		stmt.executeUpdate();
 		mail.setId(this.getGeneratedKey(stmt));
 		return mail.getId();

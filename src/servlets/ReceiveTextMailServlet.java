@@ -69,8 +69,11 @@ public class ReceiveTextMailServlet extends HttpServlet {
 		
 		try{
 			int maId = Integer.parseInt(request.getParameter("mailaddressId"));
+			Database database = Database.getDefaultDatabase();
 			MailAddress ma = Database.getDefaultDatabase().getMailAddressById(maId);
-			SimpleMailReceiver receiver = new SimpleMailReceiver(ma.getAccount(),ma.getPassword(),Database.getDefaultDatabase().getHostBySuffix(GetSuffix.getSuffixOfMailAddress(ma.getAccount())).getPop3Host());
+			String suffix = GetSuffix.getSuffixOfMailAddress(ma.getAccount());
+			String host = database.getHostBySuffix(suffix).getPop3Host();
+			SimpleMailReceiver receiver = new SimpleMailReceiver(ma.getAccount(),ma.getPassword(),host);
 			Message [] messages = receiver.getMail(ma);
 			if(messages != null){
 				out.print("{");

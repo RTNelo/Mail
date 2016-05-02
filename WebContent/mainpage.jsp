@@ -107,9 +107,9 @@
 
                       <form class="form-horizontal full-width center-block">
                         <div class="form-group">
-                          <label for="sender-address" class="col-sm-2 control-label">选项1</label>
+                          <label for="sender-address-2" class="col-sm-2 control-label">选项1</label>
                           <div class="col-sm-10">
-                            <input class="form-control" id="sender-address" placeholder="选项内容" type="email">
+                            <input class="form-control" id="sender-address-2" placeholder="选项内容" type="email">
                           </div>
                         </div>
                         <div class="form-group">
@@ -165,7 +165,7 @@
                 <%
                 	for (MailAddress mailAddress : db.getMailAddressByUser(user)) {
                 		%>
-                <tr class="account-list-item full-width" mailid="<%=mailAddress.getId() %>">
+                <tr class="account-list-item full-width" mailid="<%=mailAddress.getId() %>" mailaddress="<%=mailAddress.getAccount() %>">
                   <td>
                     <div class="header full-width">
                       <div style="" class="row info-header full-width">
@@ -346,7 +346,7 @@ ${{MailContent}}
                 </div>
             </div>
             <div style="display: none;" class="editor-container full-height" border-width="50px">
-            <form class="form-horizontal">
+            <form id="sendmailform" class="form-horizontal">
               <h2>发送邮件</h2>
               <div class="form-group">
                 <label for="sender-address" class="col-sm-2 control-label">发件箱</label>
@@ -357,13 +357,13 @@ ${{MailContent}}
               <div class="form-group">
                 <label for="reciever-address" class="col-sm-2 control-label">收件箱</label>
                 <div class="col-sm-10">
-                  <input class="form-control" id="reciever-address" placeholder="收件箱" type="email">
+                  <input class="form-control" name="to" id="reciever-address" placeholder="收件箱" type="email">
                 </div>
               </div>
               <div class="form-group">
                 <label for="title" class="col-sm-2 control-label">标题</label>
                 <div class="col-sm-10">
-                  <input class="form-control" id="title" placeholder="标题" type="text">
+                  <input class="form-control" name="title" id="title" placeholder="标题" type="text">
                 </div>
               </div>
               <div class="form-group">
@@ -402,15 +402,14 @@ ${{MailContent}}
                           <span class="glyphicon glyphicon-triangle-top" aria-hidden="true">回到顶部</span>
                       </button>
                   </div>
-                  <textarea id="edit-area" class="form-control textarea" rows="15"></textarea>
+                  <textarea id="edit-area" name="content" class="form-control textarea" rows="15"></textarea>
                 </div>
 
               </div>              
             </form>
-            <form class="form" role="form">
                 <div class="form-group">
                   <div class="col-sm-offset-9 col-sm-1">
-                     <button type="submit" class="btn btn-default">发送</button>
+                     <button id="sendmailbtn" class="btn btn-default">发送</button>
                   </div>
                </div>
                <div class="form-group">
@@ -418,7 +417,6 @@ ${{MailContent}}
                      <button type="submit" class="btn btn-default">存入草稿箱</button>
                   </div>
                </div>
-            </form>
             </div>
         </div>
       </div>

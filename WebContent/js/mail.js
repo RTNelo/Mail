@@ -12,6 +12,8 @@
     return o;  
 };  
 
+current_mail_address = undefined;
+
 $(document).ready(function() {
       scroll = function(event) {
         $('#edit-area').scrollTop(0);
@@ -87,6 +89,7 @@ $(document).ready(function() {
         if (state == "editor") {
           mail_list_container.slideUp("fast");
           clear_mail();
+          $("#sender-address").val(current_mail_address.attr("mailaddress"));
           editor_container.slideDown("fast");
         } else if (state == "maillist") {
           editor_container.slideUp("fast");
@@ -119,12 +122,14 @@ $(document).ready(function() {
     		  target = '/Mail/GetSendTextMailServlet';
     	  }
     	  $.post(target, {mailaddressId: mailid}, function(res) {
+    		  console.log(res);
+    		  res = JSON.parse(res);
     		  if (res.status == 0) {
     			  for (var mail in res.result) {
     				  add_mail(mail.Subject, mail.Content, mail.From, mail.SendTime);
     			  }
     		  }
-    	  }, 'json');
+    	  }, 'html');
       }
 
       $(".mailbox-list-item").click(function() {
@@ -193,6 +198,8 @@ $(document).ready(function() {
               info_body.slideDown("fast");
               account_list_wrapper.scrollTop(list_item.offset());
             } else if (state == "list") {
+              current_mail_address = list_item;
+              $('#sender-address').val(list_item.attr('mailaddress'));
               info_header.slideDown("fast");
               edit_header.slideUp("fast");
               body.show();
@@ -218,7 +225,7 @@ $(document).ready(function() {
 
           delete_button.click(function(event) {
             if (delete_button.children(".text").text() == "Really?") {
-              $.post('/Mail/removemailaddress',{id: $(this).parents('.account-list-item').attr('mailid')});
+              $.post('/Mail/RemoveMailAddressServlet',{mailAddressId: $(this).parents('.account-list-item').attr('mailid')});
               list_item.slideUp("normal");
             } else {
               delete_button.children(".text").text("Really?");
@@ -311,7 +318,7 @@ $(document).ready(function() {
 
           delete_button.click(function(event) {
             if (delete_button.children(".text").text() == "Really?") {
-              $.post('/Mail/removecontact', {id: $(this).parents('.contact-list-item').attr('itemid')});
+              $.post('/Mail/RemoveContactServlet', {contactId: $(this).parents('.contact-list-item').attr('itemid')});
               list_item.slideUp("normal");
             } else {
               delete_button.children(".text").text("Really?");
@@ -331,4 +338,15 @@ $(document).ready(function() {
         });
       }
       contact_list_init();
+      
+      function send_mail() {
+    	  var form_value = $('#sendmailform').serializeObject();
+    	  form_value.mailaddressId = current_mail_address.attr('mailid');
+    	  $.post('/Mail/sendmail', form_value, function (res) {
+    		  if (res.status == 0) {
+    			  toggle_main('init');
+    		  }
+    	  }, 'json')
+      }
+      $("#sendmailbtn").click(send_mail);
     })

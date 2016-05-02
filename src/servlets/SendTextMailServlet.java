@@ -45,12 +45,14 @@ public class SendTextMailServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
 		MailSenderInfo mailInfo = new MailSenderInfo();
-		int maId = Integer.parseInt(request.getParameter("mailaddressid"));
+		int maId = Integer.parseInt(request.getParameter("mailaddressId"));
 		MailAddress ma = null;
 		try {
 			ma = Database.getDefaultDatabase().getMailAddressById(maId);
-			mailInfo.setMailServerHost(Database.getDefaultDatabase().getHostBySuffix(GetSuffix.getSuffixOfMailAddress(ma.getAccount())).getSmtpHost());
-			mailInfo.setMailServerPort("25");
+			Database database = Database.getDefaultDatabase();
+			String suffix = GetSuffix.getSuffixOfMailAddress(ma.getAccount());
+			mailInfo.setMailServerHost(database.getHostBySuffix(suffix).getSmtpHost());
+			mailInfo.setMailServerPort(database.getHostBySuffix(suffix).getSmtpPort()+"");
 			mailInfo.setValidate(true);
 			mailInfo.setUserName(ma.getAccount());//锟矫伙拷
 			mailInfo.setPassword(ma.getPassword());//锟斤拷锟斤拷

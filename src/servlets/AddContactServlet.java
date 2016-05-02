@@ -53,7 +53,7 @@ public class AddContactServlet extends HttpServlet {
 				int ret = database.addContact(contact);
 				out.print("{");
 				out.print("\"status\":0,");
-				out.print("\"comment\":\"Add contact success\",");
+				out.print("\"comment\":\"Add contact success\"");
 				out.print("\"result\":");
 				out.print("{\"id\":\""+ret+"\"}");
 				out.print("}");
