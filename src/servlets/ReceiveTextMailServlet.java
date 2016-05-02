@@ -9,8 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import javax.mail.*;
+
+import util.GetSuffix;
 import SMTP.SimpleMailReceiver;
 import model.Database;
 import model.MailAddress;
@@ -67,9 +68,9 @@ public class ReceiveTextMailServlet extends HttpServlet {
 		
 		
 		try{
-			int maId = Integer.parseInt(request.getParameter("mailaddressid"));
+			int maId = Integer.parseInt(request.getParameter("mailaddressId"));
 			MailAddress ma = Database.getDefaultDatabase().getMailAddressById(maId);
-			SimpleMailReceiver receiver = new SimpleMailReceiver(ma.getAccount(),ma.getPassword(),host);
+			SimpleMailReceiver receiver = new SimpleMailReceiver(ma.getAccount(),ma.getPassword(),Database.getDefaultDatabase().getHostBySuffix(GetSuffix.getSuffixOfMailAddress(ma.getAccount())).getPop3Host());
 			Message [] messages = receiver.getMail(ma);
 			if(messages != null){
 				out.print("{");

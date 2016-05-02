@@ -55,16 +55,7 @@ public class Database {
 	public PreparedStatement getStatement(String sql, Object... args) throws SQLException {
 		PreparedStatement stmt = this.getConn().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		for (int i = 0; i != args.length; ++i) {
-			switch(args[i].getClass().getName()) {
-			case "java.util.Date":
-				stmt.setDate(i + 1, (Date)args[i]);
-				break;
-			case "java.lang.Integer":
-				stmt.setInt(i + 1, (int)args[i]);
-				break;
-			default:
-				stmt.setString(i + 1, args[i].toString());
-			}
+			stmt.setObject(i + 1, args[i]);
 		}
 		return stmt;
 	}
@@ -124,7 +115,7 @@ public class Database {
 	
 	public List<MailAddress> getMailAddressByUserId(int userId) throws SQLException {
 		List<MailAddress> results = new LinkedList<MailAddress>();
-		ResultSet rs = this.getStatement("SELECT * FROM mailaddresses WHERE userid = ?", userId).executeQuery();
+		ResultSet rs = this.getStatement("SELECT * FROM mailaddresses WHERE userid = ? ORDER BY id", userId).executeQuery();
 		while (rs.next()) {
 			results.add(this.resultSetToMailAddress(rs));
 		}
@@ -132,7 +123,7 @@ public class Database {
 	}
 	
 	public MailAddress getMailAddressByUserAndAccount(User user, String account) throws SQLException {
-		ResultSet rs = this.getStatement("SELECT * FROM mailaddresses WHERE userid = ? and account = ?",
+		ResultSet rs = this.getStatement("SELECT * FROM mailaddresses WHERE userid = ? and account = ? ORDER BY id",
 				user.getId(), account).executeQuery();
 		if (rs.next()) {
 			return this.resultSetToMailAddress(rs);
@@ -170,7 +161,7 @@ public class Database {
 	
 	public List<Mail> getMailByMailAddressId(int mailAddressId) throws SQLException {
 		List<Mail> results = new LinkedList<Mail>();
-		ResultSet rs = this.getStatement("SELECT * FROM mails WHERE mailaddressid = ?", mailAddressId).executeQuery();
+		ResultSet rs = this.getStatement("SELECT * FROM mails WHERE mailaddressid = ? ORDER BY recvtime DESC", mailAddressId).executeQuery();
 		while (rs.next()) {
 			results.add(this.resultSetToMail(rs));
 		}
@@ -179,7 +170,7 @@ public class Database {
 	
 	public List<Mail> getMailByMailAddressIdAndType(int mailAddressId, Mail.Type type) throws SQLException {
 		List<Mail> results = new LinkedList<Mail>();
-		ResultSet rs = this.getStatement("SELECT * FROM mails WHERE mailaddressid = ? and type = ?",
+		ResultSet rs = this.getStatement("SELECT * FROM mails WHERE mailaddressid = ? and type = ? ORDER BY recvtime DESC",
 				mailAddressId, type.ordinal()).executeQuery();
 		while (rs.next()) {
 			results.add(this.resultSetToMail(rs));
@@ -207,7 +198,7 @@ public class Database {
 	
 	public List<Contact> getContactByUserId(int userId) throws SQLException {
 		List<Contact> results = new LinkedList<Contact>();
-		ResultSet rs = this.getStatement("SELECT * FROM contacts WHERE userid = ?", userId).executeQuery();
+		ResultSet rs = this.getStatement("SELECT * FROM contacts WHERE userid = ? ORDER BY id", userId).executeQuery();
 		while (rs.next()) {
 			results.add(this.resultSetToContact(rs));
 		}
@@ -282,6 +273,11 @@ public class Database {
 	
 	public void removeMailById(int id) throws SQLException {
 		PreparedStatement stmt = this.getStatement("DELETE FROM mails WHERE id = ?;", id);
+		stmt.executeUpdate();
+	}
+	
+	public void removeMailByMailAddressId(int id) throws SQLException {
+		PreparedStatement stmt = this.getStatement("DELETE FROM mails WHERE mailaddressid = ?;", id);
 		stmt.executeUpdate();
 	}
 	

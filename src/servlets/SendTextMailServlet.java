@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import util.GetSuffix;
 import model.*;
 import SMTP.MailSenderInfo;
 import SMTP.SimpleMailSender;
@@ -48,32 +49,33 @@ public class SendTextMailServlet extends HttpServlet {
 		MailAddress ma = null;
 		try {
 			ma = Database.getDefaultDatabase().getMailAddressById(maId);
+			mailInfo.setMailServerHost(Database.getDefaultDatabase().getHostBySuffix(GetSuffix.getSuffixOfMailAddress(ma.getAccount())).getSmtpHost());
+			mailInfo.setMailServerPort("25");
+			mailInfo.setValidate(true);
+			mailInfo.setUserName(ma.getAccount());//锟矫伙拷
+			mailInfo.setPassword(ma.getPassword());//锟斤拷锟斤拷
+			mailInfo.setFromAddress(ma.getAccount());//锟斤拷锟斤拷锟斤拷锟斤拷
+			String[] to = {request.getParameter("to")};//锟秸硷拷锟斤拷锟斤拷
+			mailInfo.setToAddress(to);
+//			String[] toCC = {request.getParameter("toCC")};//锟斤拷锟斤拷
+//			mailInfo.setToCarbonCopyAddress(toCC);
+//			String[] toBCC = {request.getParameter("toBCC")};//锟斤拷锟斤拷
+//			mailInfo.setToBlindCarbonCopyAddress(toBCC);
+//			String[] file = {request.getParameter("file")};//锟斤拷锟斤拷
+//			mailInfo.setAttachFileNames(file);
+			mailInfo.setSubject(request.getParameter("title"));//锟斤拷锟斤拷
+			String body = request.getParameter("content");//锟斤拷锟斤拷
+			mailInfo.setContent(body);
+			System.out.println(SimpleMailSender.sendHtmlMail(ma, mailInfo));//锟斤拷锟斤拷锟斤拷锟斤拷锟绞�
+			out.print("{");
+			out.print("\"status\":0,");
+			out.print("\"comment\":\"Send mail success\"");
+			out.print("}");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		mailInfo.setMailServerHost("smtp.qq.com");
-		mailInfo.setMailServerPort("25");
-		mailInfo.setValidate(true);
-		mailInfo.setUserName(ma.getAccount());//锟矫伙拷
-		mailInfo.setPassword(ma.getPassword());//锟斤拷锟斤拷
-		mailInfo.setFromAddress(ma.getAccount());//锟斤拷锟斤拷锟斤拷锟斤拷
-		String[] to = {request.getParameter("to")};//锟秸硷拷锟斤拷锟斤拷
-		mailInfo.setToAddress(to);
-//		String[] toCC = {request.getParameter("toCC")};//锟斤拷锟斤拷
-//		mailInfo.setToCarbonCopyAddress(toCC);
-//		String[] toBCC = {request.getParameter("toBCC")};//锟斤拷锟斤拷
-//		mailInfo.setToBlindCarbonCopyAddress(toBCC);
-//		String[] file = {request.getParameter("file")};//锟斤拷锟斤拷
-//		mailInfo.setAttachFileNames(file);
-		mailInfo.setSubject(request.getParameter("title"));//锟斤拷锟斤拷
-		String body = request.getParameter("content");//锟斤拷锟斤拷
-		mailInfo.setContent(body);
-		System.out.println(SimpleMailSender.sendHtmlMail(ma, mailInfo));//锟斤拷锟斤拷锟斤拷锟斤拷锟绞�
-		out.print("{");
-		out.print("\"status\":0,");
-		out.print("\"comment\":\"Send mail success\"");
-		out.print("}");
+		
 	}
 	
 	

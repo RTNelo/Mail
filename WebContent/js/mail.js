@@ -1,4 +1,18 @@
-    $(document).ready(function() {
+    jQuery.prototype.serializeObject=function(){  
+    var a,o,h,i,e;  
+    a=this.serializeArray();  
+    o={};  
+    h=o.hasOwnProperty;  
+    for(i=0;i<a.length;i++){  
+        e=a[i];  
+        if(!h.call(o,e.name)){  
+            o[e.name]=e.value;  
+        }  
+    }  
+    return o;  
+};  
+
+$(document).ready(function() {
       scroll = function(event) {
         $('#edit-area').scrollTop(0);
         event.preventDefault();
@@ -23,7 +37,7 @@
       }
       
       function try_add_mail_address() {
-    	  var form_value = $('#addaddressform').serialize();
+    	  var form_value = $('#addaddressform').serializeObject();
     	  $.post('/Mail/MailAddressSetter', form_value, function(res) {
     		  if (res.status == 0) {
     			  add_mail_address_item(form_value.account, res.id);
@@ -45,10 +59,10 @@
       }
       
       function try_add_contact() {
-    	  var form_value = $('#addcontactform').serialize();
+    	  var form_value = $('#addcontactform').serializeObject();
     	  $.post('/Mail/addContactServlet', form_value, function(res) {
     		  if (res.status == 0) {
-    			  add_contact_item(form_value.account, emailaddress, res.id);
+    			  add_contact_item(form_value.nickname, form_value.mailaddress, res.id);
     			  $('.modal-addaddress').modal('hide');
     		  } else if (res.status == 1) {
     			  $('#addcontacttip').text('未知错误');
@@ -68,21 +82,13 @@
       function clear_mail() {
     	  mail_list.html('');
       }
-      
-      function get_mail_list(mail_address_id, mail_type) {
-      }
 
-      function toggle_main(state, selse1, selse2) {
+      function toggle_main(state) {
         if (state == "editor") {
           mail_list_container.slideUp("fast");
           clear_mail();
           editor_container.slideDown("fast");
         } else if (state == "maillist") {
-          clear_mail();
-          mails = get_mail_list(selse1, selse2);
-          for (var mail in mails) {
-          	add_mail(mail.subject, mail.content, mail.sender, mail.date);
-          }
           editor_container.slideUp("fast");
           mail_list_container.slideDown("fast");
         } else if (state == "none") {
@@ -97,9 +103,34 @@
       }
 
       toggle_main("init");
+      
+      function refresh_mail(mailid, mailtype) {
+          clear_mail();
+    	  var target;
+    	  if (mailtype == 'RECV') {
+    		  $.ajax({  
+		         type : "post",  
+		         url : "/Mail/getmails",  
+		         data : "mailaddressId=" + mailid,  
+		         async : true,  
+    		  }); 
+    		  target = '/Mail/GetReceiveTextMailServlet';
+    	  } else if (mailtype == 'SENT') {
+    		  target = '/Mail/GetSendTextMailServlet';
+    	  }
+    	  $.post(target, {mailaddressId: mailid}, function(res) {
+    		  if (res.status == 0) {
+    			  for (var mail in res.result) {
+    				  add_mail(mail.Subject, mail.Content, mail.From, mail.SendTime);
+    			  }
+    		  }
+    	  }, 'json');
+      }
 
       $(".mailbox-list-item").click(function() {
-        toggle_main("maillist", $(this).attr('mailid'), $(this).attr('mailtype'));
+    	console.log($(this));
+    	refresh_mail($(this).attr('mailid'), $(this).attr('mailtype'));
+        toggle_main("maillist");
       });
 
       $(".send").click(function(event) {

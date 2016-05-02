@@ -55,7 +55,7 @@ public class AddMailAddressServlet extends HttpServlet {
 				int ret = database.addMailAddress(mailAddress);
 				out.print("{");
 				out.print("\"status\":0,");
-				out.print("\"comment\":\"Add mail address success\"");
+				out.print("\"comment\":\"Add mail address success\",");
 				out.print("\"result\":");
 				out.print("{\"id\":\""+ret+"\"}");
 				out.print("}");

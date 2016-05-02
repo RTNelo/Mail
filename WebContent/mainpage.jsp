@@ -248,7 +248,7 @@
                 		<%
                 	}
                 %>
-
+                <tfoot>
                 <tr class="list-item-adder">
                   <td>
                     <button type="button" class="btn btn-default btn-lg center-block" data-toggle="modal" data-target=".modal-login">
@@ -256,6 +256,7 @@
                     </button>
                   </td>
                 </tr>
+                </tfoot>
               </tbody></table>
           </div>
           <div class="col-md-8 full-height">
@@ -555,7 +556,7 @@ ${{MailContent}}
                                                 <label id="addcontacttip" class="text-danger"></label>
                                             </div>
                                             <div class="form-group">
-                                                <input class="form-control" name="emailaddress" placeholder="邮箱" type="email">
+                                                <input class="form-control" name="mailaddress" placeholder="邮箱" type="email">
                                             </div>
                                         </form>
                                     </div>
@@ -572,7 +573,7 @@ ${{MailContent}}
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-
+	<script type="text/javascript" src="js/jquery.form.js"></script>
     <script type="text/javascript" src="js/mail.js"></script>
   
 
