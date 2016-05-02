@@ -131,6 +131,16 @@ public class Database {
 		return results;
 	}
 	
+	public MailAddress getMailAddressByUserAndAccount(User user, String account) throws SQLException {
+		ResultSet rs = this.getStatement("SELECT * FROM mailaddresses WHERE userid = ? and account = ?",
+				user.getId(), account).executeQuery();
+		if (rs.next()) {
+			return this.resultSetToMailAddress(rs);
+		} else {
+			return null;
+		}
+	}
+	
 	public List<MailAddress> getMailAddressByUser(User user) throws SQLException {
 		return this.getMailAddressByUserId(user.getId());
 	}
@@ -183,6 +193,16 @@ public class Database {
 		String nickname = rs.getString("nickname");
 		String mailAddress = rs.getString("mailAddress");
 		return new Contact(contactId, userId, nickname, mailAddress);
+	}
+	
+	public Contact getContactByUserAndMailAddress(User user, String mailAddress) throws SQLException {
+		ResultSet rs = this.getStatement("SELECT * FROM contacts WHERE userid = ? and mailaddress = ?",
+				user.getId(), mailAddress).executeQuery();
+		if (rs.next()) {
+			return this.resultSetToContact(rs);
+		} else {
+			return null;
+		}
 	}
 	
 	public List<Contact> getContactByUserId(int userId) throws SQLException {
