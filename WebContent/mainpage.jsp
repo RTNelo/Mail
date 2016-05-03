@@ -59,84 +59,17 @@
       <div class="collapse navbar-collapse">
         <div class="nav navbar-nav navbar-right">
           <form class="navbar-form navbar-left" role="search">
-            <div class="form-group">
-              <input class="search" type="text">
-              <a class="btn btn-info search-button">
-                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-              </a>
-            </div>
             <a class="btn btn-info send">
               <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
             </a>
             <a class="btn btn-info">
               <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
             </a>            
-            <a class="btn btn-default">
-              <span class="glyphicon glyphicon-cog" aria-hidden="true" data-toggle="modal" data-target=".modal-config"></span>
-            </a>
           </form>
         </div>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>
-
-    <div class="modal modal-config fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title">配置</h4>
-                </div>
-                <div class="bd row">
-                 <div class="panel panel-default fullheight col-md-3">
-                      <div class="panel-body">
-                        <div class="list-group">
-                          <a href="#" class="list-group-item active">总体设置</a>
-                          <a href="#" class="list-group-item">服务器</a>
-                          <a href="#" class="list-group-item">界面</a>
-                          <a href="#" class="list-group-item">安全</a>
-                          <a href="#" class="list-group-item">其他<span class="badge">1</span></a>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="fullheight col-md-9">
-                      <div id="title">
-                        <h1 align="center">总体设置</h1>
-                      </div>
-
-                      <form class="form-horizontal full-width center-block">
-                        <div class="form-group">
-                          <label for="sender-address-2" class="col-sm-2 control-label">选项1</label>
-                          <div class="col-sm-10">
-                            <input class="form-control" id="sender-address-2" placeholder="选项内容" type="email">
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="reciever-address" class="col-sm-2 control-label">选项2</label>
-                          <div class="col-sm-10">
-                            <input class="form-control" id="reciever-address" placeholder="选项内容" type="email">
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="title" class="col-sm-2 control-label">选项3</label>
-                          <div class="col-sm-10">
-                            <input class="form-control" id="title" placeholder="选项内容" type="password">
-                          </div>
-                        </div>    
-                        <div class="form-group full-width">
-                          <div class="btn-group btn-group-lg float-right" role="group" aria-label="...">
-                            <a class="btn btn-success">保存</a>
-                            <a class="btn btn-warning" data-dismiss="modal">取消</a>
-                          </div>        
-                        </div>
-                      </form>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
 
     <div class="modal modal-add fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
         <div class="modal-dialog modal-sm">
@@ -369,52 +302,14 @@ ${{MailContent}}
               <div class="form-group">
                 <label for="edit-area" class="col-sm-2 control-label">正文</label>
                 <div class="col-sm-10">      
-                    <div class="btn-group full-width" id="toolbar">
-                      <button type="button" class="btn btn-default btn-sm with-hh">
-                          <span class="glyphicon glyphicon-text-size" aria-hidden="true">字体大小</span>
-                      </button>
-
-                      <button type="button" class="btn btn-default btn-sm with-hh">
-                          <span class="glyphicon glyphicon-text-color" aria-hidden="true">字体颜色</span>
-                      </button>
-
-                      <button type="button" class="btn btn-default btn-sm with-hh">
-                          <span class="glyphicon glyphicon-align-left" aria-hidden="true">左对齐</span>
-                      </button>
-
-                      <button type="button" class="btn btn-default btn-sm with-hh">
-                          <span class="glyphicon glyphicon-align-center" aria-hidden="true">居中</span>
-                      </button>
-
-                      <button type="button" class="btn btn-default btn-sm with-hh">
-                          <span class="glyphicon glyphicon-align-right" aria-hidden="true">右对齐</span>
-                      </button>
-
-                      <button type="button" class="btn btn-default btn-sm with-hh">
-                          <span class="glyphicon glyphicon-align-justify" aria-hidden="true">平铺</span>
-                      </button>
-
-                      <button type="button" class="btn btn-default btn-sm with-hh">
-                          <span class="glyphicon glyphicon-paperclip" aria-hidden="true">添加附件</span>
-                      </button>
-
-                      <button class="btn btn-default btn-sm with-hh scrolltop">
-                          <span class="glyphicon glyphicon-triangle-top" aria-hidden="true">回到顶部</span>
-                      </button>
-                  </div>
                   <textarea id="edit-area" name="content" class="form-control textarea" rows="15"></textarea>
                 </div>
 
               </div>              
             </form>
                 <div class="form-group">
-                  <div class="col-sm-offset-9 col-sm-1">
+                  <div class="col-sm-offset-12 col-sm-1">
                      <button id="sendmailbtn" class="btn btn-default">发送</button>
-                  </div>
-               </div>
-               <div class="form-group">
-                  <div class="col-sm-2">
-                     <button type="submit" class="btn btn-default">存入草稿箱</button>
                   </div>
                </div>
             </div>
@@ -442,7 +337,7 @@ ${{MailContent}}
                           </div>
                           <div class="float-right">
                             <div style="display: none;" class="btn-group button-group" role="group">
-                              <button type="button" class="btn btn-info send">
+                              <button type="button" class="btn btn-info send" id="refresh">
                                 <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
                               </button>
                               <button type="button" id="edit" class="btn btn-info">
@@ -565,7 +460,7 @@ ${{MailContent}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" id="addcontactbtn" class="btn btn-primary">登录</button>
+                    <button type="button" id="addcontactbtn" class="btn btn-primary">添加</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

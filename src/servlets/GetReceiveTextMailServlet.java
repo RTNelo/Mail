@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import model.Database;
 import model.Mail;
 import model.Mail.Type;
@@ -46,41 +49,44 @@ public class GetReceiveTextMailServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		Database database = Database.getDefaultDatabase();
 		int mailaddressId = Integer.parseInt(request.getParameter("mailaddressId"));
+		int limit = Integer.parseInt(request.getParameter("limit"));
+		int offset = Integer.parseInt(request.getParameter("offset"));
 		try {
-			List<Mail> mails = database.getMailByMailAddressIdAndType(mailaddressId, Type.RECV);
+			List<Mail> mails = database.getMailByMailAddressIdAndType(mailaddressId, Type.RECV, limit, offset);
 			if(mails != null){
-				out.print("{");
-				out.print("\"status\":0,");
-				out.print("\"comment\":\"Get message success\",");
-				out.print("\"result\":[");
-				for(int i = 0;i < mails.size();i++){
+				JSONObject object = new JSONObject();
+				object.put("status", 0);
+				object.put("comment", "success");
+				JSONArray inner = new JSONArray();			
+				for(int i=0;i<mails.size();i++){
 					Mail mail = mails.get(i);
-					out.print("{"+"\"From\":\""+mail.getSender()+"\",");
-					out.print("\"To\":\""+mail.getRecver()[0]+"\",");
-					out.print("\"SendTime\":\""+mail.getSendTime()+"\",");
-					out.print("\"ReceiveTime\":\""+mail.getRecvTime()+"\",");
-					out.print("\"Subject\":\""+mail.getSubject()+"\",");
-					out.print("\"Content\":\""+mail.getContent()+"\"}");
-					if(i!=mails.size()-1){
-						out.print(",");
-					}
+					JSONObject mailAddress = new JSONObject();
+					mailAddress.put("from", mail.getSender());
+					mailAddress.put("to", mail.getRecver()[0]);
+					mailAddress.put("SendTime", mail.getSendTime());
+					mailAddress.put("ReceiveTime", mail.getRecvTime());
+					mailAddress.put("Subject", mail.getSubject());
+					mailAddress.put("Content", mail.getContent());
+					mailAddress.put("Id", mail.getId());
+					inner.put(mailAddress);
 				}
-				out.print("]");
-				out.print("}");
+				object.put("result", inner);
+				out.print(object.toString());
+				
 			}
 			else{
-				out.print("{");
-				out.print("\"status\":2,");
-				out.print("\"comment\":\"receive mail no exist\"");
-				out.print("}");
+				JSONObject object = new JSONObject();
+				object.put("status", 2); 
+				object.put("comment", "exist");
+				out.println(object.toString());
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			out.print("{");
-			out.print("\"status\":1,");
-			out.print("\"comment\":\"Get message fail\"");
-			out.print("}");
+			JSONObject object = new JSONObject();
+			object.put("status", 1); 
+			object.put("comment", "fail");
+			out.println(object.toString());
 		}
 	}
 

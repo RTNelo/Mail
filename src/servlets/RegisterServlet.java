@@ -28,9 +28,10 @@ public class RegisterServlet extends HttpServlet {
     }
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		session.setAttribute("accountInvalid", false);
-		session.setAttribute("nicknameInvalid", false);
+		request.setAttribute("accountInvalid", false);
+		request.setAttribute("nicknameInvalid", false);
+		request.setAttribute("passwordInvalid", false);
+		request.setAttribute("repasswordInvalid", false);
 		request.getRequestDispatcher("register.jsp").forward(request, response);
 	}
 
@@ -40,13 +41,45 @@ public class RegisterServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setAttribute("accountInvalid", false);
+		request.setAttribute("nicknameInvalid", false);
+		request.setAttribute("passwordInvalid", false);
+		request.setAttribute("repasswordInvalid", false);
+		
 		String account = request.getParameter("account");
 		String nickname = request.getParameter("nickname");
 		String password = request.getParameter("password");
 		String repassword = request.getParameter("repassword");
 		User newUser = new User(account, password, nickname);
+		Database db = Database.getDefaultDatabase();
 		try {
-			Database.getDefaultDatabase().addUser(newUser);
+			boolean invalidFlag = false;
+			if (db.getUserByAccount(account) != null || account.length() < 4) {
+				request.setAttribute("accountInvalid", true);
+				invalidFlag = true;
+			}
+			if (nickname.length() < 3) {
+				request.setAttribute("nicknameInvalid", true);
+				invalidFlag = true;
+			}
+			if (repassword.length() < 6) {
+				request.setAttribute("passwordInvalid", true);
+				invalidFlag = true;
+			}
+			if (!repassword.equals(password)) {
+				request.setAttribute("repasswordInvalid", true);
+				invalidFlag = true;
+			}
+			if (invalidFlag) {
+				request.getRequestDispatcher("register.jsp").forward(request, response);
+				return;
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			db.addUser(newUser);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

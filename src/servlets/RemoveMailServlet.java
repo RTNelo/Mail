@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
+
 import model.Database;
 import model.Mail;
 
@@ -48,24 +50,25 @@ public class RemoveMailServlet extends HttpServlet {
 			Mail mail = database.getMailById(mailId);
 			if(mail!=null){
 				database.removeMail(mail);
-				out.print("{");
-				out.print("\"status\":0,");
-				out.print("\"comment\":\"remove mail success\"");
-				out.print("}");
+				
+				JSONObject obj = new JSONObject();
+				obj.put("status", 0);
+				obj.put("comment", "success");
+				out.print(obj.toString());
 			}
 			else{
-				out.print("{");
-				out.print("\"status\":2,");
-				out.print("\"comment\":\"mail not exist\"");
-				out.print("}");
+				JSONObject obj = new JSONObject();
+				obj.put("status", 2);
+				obj.put("comment", "mail not exists");
+				out.print(obj.toString());
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			out.print("{");
-			out.print("\"status\":1,");
-			out.print("\"comment\":\"remove mail fail\"");
-			out.print("}");
+			JSONObject obj = new JSONObject();
+			obj.put("status", 1);
+			obj.put("comment", "server error");
+			out.print(obj.toString());
 		}
 	}
 

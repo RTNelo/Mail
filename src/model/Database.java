@@ -161,17 +161,17 @@ public class Database {
 	
 	public List<Mail> getMailByMailAddressId(int mailAddressId) throws SQLException {
 		List<Mail> results = new LinkedList<Mail>();
-		ResultSet rs = this.getStatement("SELECT * FROM mails WHERE mailaddressid = ? ORDER BY recvtime DESC", mailAddressId).executeQuery();
+		ResultSet rs = this.getStatement("SELECT * FROM mails WHERE mailaddressid = ? ORDER BY sendtime DESC", mailAddressId).executeQuery();
 		while (rs.next()) {
 			results.add(this.resultSetToMail(rs));
 		}
 		return results;
 	}
 	
-	public List<Mail> getMailByMailAddressIdAndType(int mailAddressId, Mail.Type type) throws SQLException {
+	public List<Mail> getMailByMailAddressIdAndType(int mailAddressId, Mail.Type type, int limit, int offset) throws SQLException {
 		List<Mail> results = new LinkedList<Mail>();
-		ResultSet rs = this.getStatement("SELECT * FROM mails WHERE mailaddressid = ? and type = ? ORDER BY recvtime DESC",
-				mailAddressId, type.ordinal()).executeQuery();
+		ResultSet rs = this.getStatement("SELECT * FROM mails WHERE mailaddressid = ? and type = ? ORDER BY sendtime DESC LIMIT ? OFFSET ?",
+				mailAddressId, type.ordinal(), limit, offset).executeQuery();
 		while (rs.next()) {
 			results.add(this.resultSetToMail(rs));
 		}

@@ -28,9 +28,8 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	HttpSession session = request.getSession();
-    	session.setAttribute("accountNotFound", false);
-    	session.setAttribute("passwordInvalid", false);
+    	request.setAttribute("accountNotFound", false);
+    	request.setAttribute("passwordInvalid", false);
     	request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 	/**
@@ -38,6 +37,8 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+    	request.setAttribute("accountNotFound", false);
+    	request.setAttribute("passwordInvalid", false);
 		String account = request.getParameter("account");
 		String password = request.getParameter("password");
 		try {
@@ -46,7 +47,7 @@ public class LoginServlet extends HttpServlet {
 				request.getSession().setAttribute("user", user);
 				response.sendRedirect("/Mail/MainPage");
 			} else {
-				request.getSession().setAttribute("passwordInvalid", true);
+				request.setAttribute("passwordInvalid", true);
 				request.getRequestDispatcher("login.jsp").forward(request, response);
 			}
 

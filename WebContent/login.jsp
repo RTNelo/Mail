@@ -41,7 +41,7 @@
     
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title" id="gridSystemModalLabel"><a class="btn">登录</a></h4>
+                    <h4 class="modal-title" id="gridSystemModalLabel">登录 | <a href="/Mail/register">注册</a></h4>
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
@@ -52,21 +52,19 @@
                                         <form id="loginform" class="user-input" method="post">
                                             <div class="form-group">
                                                 <input class="form-control" name="account" placeholder="请输入Email账号" type="email">
-                                                <% if ((boolean)session.getAttribute("accountNotFound")) { %>
+                                                <% if ((boolean)request.getAttribute("accountNotFound")) { %>
                                                 <label class="text-danger">账号不存在</label>
                                                 <% } %>
                                             </div>
                                             <div class="form-group">
                                                 <input class="form-control" name="password" placeholder="请输入密码" type="password">
-                                                <% if ((boolean)session.getAttribute("passwordInvalid")) {%>
+                                                <% if ((boolean)request.getAttribute("passwordInvalid")) {%>
                                                 <label class="text-danger">密码错误</label>
                                                 <% } %>
                                             </div>
                                         </form>
                                     </div>
                                 </td>
-
-                                
                             </tr>
                         </tbody></table>
                     </div>

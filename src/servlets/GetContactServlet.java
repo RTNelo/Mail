@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import model.Contact;
 import model.Database;
 import model.User;
@@ -45,30 +48,29 @@ public class GetContactServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
 		Database database = Database.getDefaultDatabase();
-		User user = (User)request.getSession().getAttribute("User");
+		User user = (User)request.getSession().getAttribute("user");
 		try {
 			List<Contact> contacts = database.getContactByUserId(user.getId());
-			out.print("{");
-			out.print("\"status\":0,");
-			out.print("\"comment\":\"Get contact success\",");
-			out.print("\"result\":[");
+			JSONObject object = new JSONObject();
+			object.put("status", 0);
+			object.put("comment", "success");
+			JSONArray inner = new JSONArray();			
 			for(int i=0;i<contacts.size();i++){
-				out.print("{");
-				out.print("\"contact\":{\"nickname\":\""+contacts.get(i).getNickname()+"\",\"mailAddress\":\""+contacts.get(i).getMailAddress()+"\"}");
-				out.print("}");
-				if(i!=contacts.size()-1){
-					out.print(",");
-				}
+				JSONObject contact = new JSONObject();
+				contact.put("nickname", contacts.get(i).getNickname());
+				contact.put("mailAddress", contacts.get(i).getMailAddress());
+				inner.put(contact);
 			}
-			out.print("]");
-			out.print("}");
+			object.put("result", inner);
+			out.print(object.toString());
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			out.print("{");
-			out.print("\"status\":1,");
-			out.print("\"comment\":\"Get contact fail\"");
-			out.print("}");
+			JSONObject object = new JSONObject();
+			object.put("status", 1); 
+			object.put("comment", "fail");
+			out.println(object.toString());
 		}
 	}
 

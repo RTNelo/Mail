@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
+
 import model.Contact;
 import model.Database;
 import model.Mail;
@@ -47,18 +49,18 @@ public class RemoveContactServlet extends HttpServlet {
 		int contactId = Integer.parseInt(request.getParameter("contactId"));
 		try {
 				database.removeContactById(contactId);;
-				out.print("{");
-				out.print("\"status\":0,");
-				out.print("\"comment\":\"remove contact success\"");
-				out.print("}");
+				JSONObject obj = new JSONObject();
+				obj.put("status", 0);
+				obj.put("comment", "success");
+				out.print(obj.toString());
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			out.print("{");
-			out.print("\"status\":1,");
-			out.print("\"comment\":\"remove contact fail\"");
-			out.print("}");
+			JSONObject obj = new JSONObject();
+			obj.put("status", 1);
+			obj.put("comment", "server error");
+			out.print(obj.toString());
 		}
 	}
 

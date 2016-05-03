@@ -14,6 +14,8 @@ import model.Contact;
 import model.Database;
 import model.User;
 
+import org.json.*;
+
 /**
  * Servlet implementation class addContactServlet
  */
@@ -51,26 +53,27 @@ public class AddContactServlet extends HttpServlet {
 			Contact contact = new Contact(user, nickname, mailAddress);
 			if(database.getContactByUserAndMailAddress(user, mailAddress)==null){
 				int ret = database.addContact(contact);
-				out.print("{");
-				out.print("\"status\":0,");
-				out.print("\"comment\":\"Add contact success\"");
-				out.print("\"result\":");
-				out.print("{\"id\":\""+ret+"\"}");
-				out.print("}");
+				JSONObject object = new JSONObject();
+				object.put("status", 0);
+				object.put("comment", "success");
+				JSONObject inner = new JSONObject();
+				inner.put("id", ret);
+				object.put("result", inner);
+				out.print(object.toString());
 			}
 			else{
-				out.print("{");
-				out.print("\"status\":2,");
-				out.print("\"comment\":\"Contact exist\"");
-				out.print("}");
+				JSONObject object = new JSONObject();
+				object.put("status", 2); 
+				object.put("comment", "exist");
+				out.println(object.toString());
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			out.print("{");
-			out.print("\"status\":1,");
-			out.print("\"comment\":\"Add contact fail\"");
-			out.print("}");
+			JSONObject object = new JSONObject();
+			object.put("status", 1); 
+			object.put("comment", "fail");
+			out.println(object.toString());
 		}
 	}
 

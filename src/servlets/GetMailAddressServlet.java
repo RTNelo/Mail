@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import model.Database;
 import model.MailAddress;
 import model.User;
@@ -48,27 +51,27 @@ public class GetMailAddressServlet extends HttpServlet {
 		User user = (User)request.getSession().getAttribute("user");
 		try {
 			List<MailAddress> mailAddresses = database.getMailAddressByUser(user);
-			out.print("{");
-			out.print("\"status\":0,");
-			out.print("\"comment\":\"Get mail address success\",");
-			out.print("\"result\":[");
+			JSONObject object = new JSONObject();
+			object.put("status", 0);
+			object.put("comment", "success");
+			JSONArray inner = new JSONArray();			
 			for(int i=0;i<mailAddresses.size();i++){
-				out.print("{");
-				out.print("\"mailAddress\":{\"account\":\""+mailAddresses.get(i).getAccount()+"\",\"password\":\""+mailAddresses.get(i).getPassword()+"\"}");
-				out.print("}");
-				if(i!=mailAddresses.size()-1){
-					out.print(",");
-				}
+				JSONObject mailAddress = new JSONObject();
+				mailAddress.put("account", mailAddresses.get(i).getAccount());
+				mailAddress.put("password", mailAddresses.get(i).getPassword());
+				inner.put(mailAddress);
 			}
-			out.print("]");
-			out.print("}");
+			object.put("result", inner);
+			out.print(object.toString());
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			out.print("{");
-			out.print("\"status\":1,");
-			out.print("\"comment\":\"Get mail address fail\"");
-			out.print("}");
+			JSONObject object = new JSONObject();
+			object.put("status", 1); 
+			object.put("comment", "fail");
+			out.println(object.toString());
+			
 		}
 	}
 

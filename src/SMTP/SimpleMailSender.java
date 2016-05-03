@@ -34,6 +34,16 @@ public class SimpleMailSender {
 		// �ж��Ƿ���Ҫ�����֤
 		MyAuthenticator authenticator = null;
 		Properties props = senderInfo.getProperties();
+		props.setProperty("mail.smtp.auth", "true");
+		HostInfo info;
+		try {
+			info = Database.getDefaultDatabase().getHostBySuffix(util.GetSuffix.getSuffixOfMailAddress(mailAddress.getAccount()));
+			props.setProperty("mail.smtp.host", info.getSmtpHost());
+			props.setProperty("mail.smtp.port", info.getSmtpPort() + "");
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		if(senderInfo.isValidate()){
 			// �����Ҫ�����֤���򴴽�һ��������֤��   
 			authenticator = new MyAuthenticator(senderInfo.getUserName(), senderInfo.getPassword());

@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
+
 import model.Database;
 import model.MailAddress;
 import model.User;
@@ -53,27 +55,28 @@ public class AddMailAddressServlet extends HttpServlet {
 			MailAddress mailAddress = new MailAddress(user, account, password);
 			if(database.getMailAddressByUserAndAccount(user, account)==null){
 				int ret = database.addMailAddress(mailAddress);
-				out.print("{");
-				out.print("\"status\":0,");
-				out.print("\"comment\":\"Add mail address success\"");
-				out.print("\"result\":");
-				out.print("{\"id\":\""+ret+"\"}");
-				out.print("}");
+				JSONObject object = new JSONObject();
+				object.put("status", 0);
+				object.put("comment", "success");
+				JSONObject inner = new JSONObject();
+				inner.put("id", ret);
+				object.put("result", inner);
+				out.print(object.toString());
 			}
 			else{
-				out.print("{");
-				out.print("\"status\":2,");
-				out.print("\"comment\":\"mail address exist\"");
-				out.print("}");
+				JSONObject object = new JSONObject();
+				object.put("status", 2); 
+				object.put("comment", "exist");
+				out.println(object.toString());
 			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			out.print("{");
-			out.print("\"status\":1,");
-			out.print("\"comment\":\"Add mail address fail\"");
-			out.print("}");
+			JSONObject object = new JSONObject();
+			object.put("status", 1); 
+			object.put("comment", "fail");
+			out.println(object.toString());
 		}
 	}
 

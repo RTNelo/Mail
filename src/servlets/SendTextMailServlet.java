@@ -15,6 +15,8 @@ import model.*;
 import SMTP.MailSenderInfo;
 import SMTP.SimpleMailSender;
 
+import org.json.*;
+
 /**
  * Servlet implementation class mail
  */
@@ -68,14 +70,19 @@ public class SendTextMailServlet extends HttpServlet {
 			mailInfo.setSubject(request.getParameter("title"));//锟斤拷锟斤拷
 			String body = request.getParameter("content");//锟斤拷锟斤拷
 			mailInfo.setContent(body);
-			System.out.println(SimpleMailSender.sendHtmlMail(ma, mailInfo));//锟斤拷锟斤拷锟斤拷锟斤拷锟绞�
-			out.print("{");
-			out.print("\"status\":0,");
-			out.print("\"comment\":\"Send mail success\"");
-			out.print("}");
+			System.out.println(SimpleMailSender.sendMail(ma, mailInfo));//锟斤拷锟斤拷锟斤拷锟斤拷锟绞�
+			JSONObject obj = new JSONObject();
+			obj.put("status", 0);
+			obj.put("comment", "success");
+			out.print(obj.toString());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			JSONObject obj = new JSONObject();
+			
+			obj.put("status", 1);
+			obj.put("comment", "server error");
+			out.print(obj.toString());
 		}
 		
 	}

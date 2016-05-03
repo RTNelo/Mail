@@ -15,10 +15,13 @@ public class Converter {
 		Object content = messagePart.getContent();
 		String con = "";
 		if (content instanceof Multipart) {
-			   messagePart = ((Multipart) content).getBodyPart(0);
-			   if (messagePart.getContentType().indexOf("text/plain") != -1) {
+		   for (int i = 0; i != ((Multipart) content).getCount(); ++i)
+		   {
+			   messagePart = ((Multipart) content).getBodyPart(i);
+			   if (messagePart.getContentType().indexOf("text/html") != -1) {
 				   con += (String)messagePart.getContent();
 			   }
+		   }
 		}
 		Mail mail = new Mail(mailAddress, message.getSubject(), con, message.getFrom()[0].toString(), AddressToString(message.getAllRecipients()), message.getSentDate(), message.getReceivedDate(), type);
 		return mail;

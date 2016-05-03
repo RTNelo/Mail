@@ -70,19 +70,18 @@ a,a:hover,a:link,a:visited,a:active{
     margin: 10px;
     padding: 5px;
 }
-.mail-content{
-    font-size: xx-large;
+iframe {
+	width: 100%;
 }
 .mail-ap{
-    width: 24px;
+    width: 16px;
     height: width;
 }
 .mail-date{
     margin-top: 0px;
 }
 .mail-them{
-    margin-top: 15px;
-    font-size: large;
+    margin-top: 7px;
     font-style: oblique;
 }
 hr{

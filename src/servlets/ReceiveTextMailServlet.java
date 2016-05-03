@@ -9,6 +9,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import javax.mail.*;
 
 import util.GetSuffix;
@@ -76,38 +80,39 @@ public class ReceiveTextMailServlet extends HttpServlet {
 			SimpleMailReceiver receiver = new SimpleMailReceiver(ma.getAccount(),ma.getPassword(),host);
 			Message [] messages = receiver.getMail(ma);
 			if(messages != null){
-				out.print("{");
-				out.print("\"status\":0,");
-				out.print("\"comment\":\"Get message success\",");
-				out.print("\"result\":[");
+				JSONObject obj = new JSONObject();
+				obj.put("status", 0);
+				obj.put("comment", "success");
+				JSONArray inner = new JSONArray();
+				
 				for(int i = 0;i < messages.length;i++){
 					Message message = messages[i];
-					out.print("{\"From\":\""+message.getFrom()[0].toString()+"\",");
-					out.print("\"To\":\""+message.getAllRecipients()[0].toString()+"\",");
-					out.print("\"SendTime\":\""+message.getSentDate()+"\",");
-					out.print("\"ReceiveTime\":\""+message.getReceivedDate()+"\",");
-					out.print("\"Subject\":\""+message.getSubject()+"\",");
-					out.print("\"Content\":\""+message.getContent()+"\"}");
-					if(i!=messages.length-1){
-						out.print(",");
-					}
+					JSONObject mail = new JSONObject();
+					mail.put("From", message.getFrom()[0].toString());
+					mail.put("To", message.getAllRecipients()[0].toString());
+					mail.put("SendTime", message.getSentDate());
+					mail.put("ReceiveTime", message.getReceivedDate());
+					mail.put("Subject", message.getSubject());
+					mail.put("Content", message.getContent());
+					inner.put(mail);
 				}
-				out.print("]");
-				out.print("}");
+				obj.put("result", inner);
+				out.print(obj.toString());
+			
 			}
 			else{
-				out.print("{");
-				out.print("\"status\":2,");
-				out.print("\"comment\":\"Login fail\"");
-				out.print("}");
+				JSONObject obj = new JSONObject();
+				obj.put("status", 2);
+				obj.put("comment", "server error");
+				out.print(obj.toString());
 			}
 			
 		}catch(MessagingException | SQLException e){
 			e.printStackTrace();
-			out.print("{");
-			out.print("\"status\":1,");
-			out.print("\"comment\":\"Get message fail\"");
-			out.print("}");
+			JSONObject obj = new JSONObject();
+			obj.put("status", 2);
+			obj.put("comment", "cannot get message");
+			out.print(obj.toString());
 		}
 	}
 

@@ -48,8 +48,7 @@ public class SimpleMailReceiver {
 	public Message [] getMail(MailAddress mailAddress) throws MessagingException{
 		Properties prop = new Properties();
 		prop.put("mail.pop3.host", host);
-		MyAuthenticator auth = new MyAuthenticator(name,password);
-		Session mailSession = Session.getDefaultInstance(prop,auth);
+		Session mailSession = Session.getDefaultInstance(prop);
 		store = mailSession.getStore("pop3");
 		store.connect(host,name,password);
 		inbox = store.getDefaultFolder().getFolder("inbox");
